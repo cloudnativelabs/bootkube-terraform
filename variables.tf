@@ -8,6 +8,8 @@ variable "api_servers" {
   type        = "list"
 }
 
+variable "api_ip" { }
+
 variable "etcd_servers" {
   description = "List of etcd server URLs including protocol, host, and port. Ignored if experimental self-hosted etcd is enabled."
   type        = "list"
