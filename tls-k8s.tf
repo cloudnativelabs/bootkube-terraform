@@ -73,9 +73,7 @@ resource "tls_cert_request" "apiserver" {
     "kubernetes.default.svc.cluster.local",
   ]
 
-  ip_addresses = [
-    "${cidrhost(var.service_cidr, 1)}",
-  ]
+  ip_addresses = "${distinct([cidrhost(var.service_cidr, 1)],compact(var.api_servers_ips))}"
 }
 
 resource "tls_locally_signed_cert" "apiserver" {
