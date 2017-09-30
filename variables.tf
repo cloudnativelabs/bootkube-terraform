@@ -84,3 +84,42 @@ variable "ca_private_key" {
   type        = "string"
   default     = ""
 }
+
+variable "kube_router" {
+  description = "Map of kube-router feature toggles."
+  type = "map"
+
+  default = {
+    pod_networking = true
+    service_proxy  = true
+    network_policy = true
+  }
+}
+
+variable "etcd_ca_cert" {
+  description = ""
+}
+
+variable "etcd_client_cert" {
+  description = ""
+}
+
+variable "etcd_client_key" {
+  description = ""
+}
+
+variable "etcd_server_cert" {
+  description = ""
+}
+
+variable "etcd_server_key" {
+  description = ""
+}
+
+variable "etcd_peer_cert" {
+  description = ""
+}
+
+variable "etcd_peer_key" {
+  description = ""
+}

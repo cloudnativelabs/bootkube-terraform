@@ -1,5 +1,15 @@
-# Assets generated only when experimental self-hosted etcd is enabled
+resource "template_dir" "kube-proxy-manifests" {
+  count           = "${var.kube_router["service_proxy"] ? "0" : "1"}"
+  source_dir      = "${path.module}/resources/kube-proxy"
+  destination_dir = "${var.asset_dir}/manifests-networking"
 
+  vars {
+    hyperkube_image = "${var.container_images["hyperkube"]}"
+    pod_cidr        = "${var.pod_cidr}"
+  }
+}
+
+# Assets generated only when experimental self-hosted etcd is enabled
 resource "template_dir" "flannel-manifests" {
   count           = "${var.networking == "flannel" ? 1 : 0}"
   source_dir      = "${path.module}/resources/flannel"
@@ -55,12 +65,12 @@ resource "template_dir" "experimental-manifests" {
     etcd_service_ip = "${cidrhost(var.service_cidr, 15)}"
 
     # Self-hosted etcd TLS certs / keys
-    etcd_ca_cert     = "${base64encode(tls_self_signed_cert.etcd-ca.cert_pem)}"
-    etcd_client_cert = "${base64encode(tls_locally_signed_cert.client.cert_pem)}"
-    etcd_client_key  = "${base64encode(tls_private_key.client.private_key_pem)}"
-    etcd_server_cert = "${base64encode(tls_locally_signed_cert.server.cert_pem)}"
-    etcd_server_key  = "${base64encode(tls_private_key.server.private_key_pem)}"
-    etcd_peer_cert   = "${base64encode(tls_locally_signed_cert.peer.cert_pem)}"
-    etcd_peer_key    = "${base64encode(tls_private_key.peer.private_key_pem)}"
+    etcd_ca_cert     = "${base64encode(var.etcd_ca_cert)}"
+    etcd_client_cert = "${base64encode(var.etcd_client_cert)}"
+    etcd_client_key  = "${base64encode(var.etcd_client_key)}"
+    etcd_server_cert = "${base64encode(var.etcd_server_cert)}"
+    etcd_server_key  = "${base64encode(var.etcd_server_key)}"
+    etcd_peer_cert   = "${base64encode(var.etcd_peer_cert)}"
+    etcd_peer_key    = "${base64encode(var.etcd_peer_key)}"
   }
 }
